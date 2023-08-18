@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TestExercise.Abstractions;
 using TestExercise.Controllers.DTOs;
 using TestExercise.Domain.Models;
+using TestExercise.Services;
 
 namespace TestExercise.Controllers;
 
@@ -10,74 +10,47 @@ namespace TestExercise.Controllers;
 [Route("api/[controller]")]
 public class IncidentsController : Controller
 {
-    private readonly IIncidentRepository _incidentRepository;
-    private readonly IAccountRepository _accountRepository;
-    private readonly IContactRepository _contactRepository;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IFinderService _finderService;
+    private readonly IChangerService _changerService;
 
-    public IncidentsController(IIncidentRepository incidentRepository, IUnitOfWork unitOfWork, IMapper mapper, IAccountRepository accountRepository, IContactRepository contactRepository)
+    public IncidentsController(IMapper mapper, IFinderService finderService, IChangerService changerService)
     {
-        _incidentRepository = incidentRepository;
-        _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _accountRepository = accountRepository;
-        _contactRepository = contactRepository;
+        _finderService = finderService;
+        _changerService = changerService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllIncidents()
     {
-        var incidents = await _incidentRepository.GetAll();
-        return Ok(incidents);
+        var incidents = await _finderService.GetAllIncidents();
+        var response = _mapper.Map<List<IncidentResponseDto>>(incidents);
+        return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(RequestDto dto)
+    public async Task<IActionResult> CreateIncident(RequestDto dto)
     {
-        var accountName = dto.AccountName;
-        var foundAccount = await _accountRepository.GetByName(accountName);
-        if (foundAccount is null)
+        var account = _mapper.Map<RequestDto, Account>(dto);
+        account = await _finderService.GetAccountFromSystem(account);
+        if (account is null)
         {
             return NotFound();
         }
-        var email = dto.Email;
-        var foundContact = await _contactRepository.GetByEmail(email);
-
-        if (foundContact is not null)
+        var inputContact = _mapper.Map<RequestDto, Contact>(dto);
+        var foundContact = await _finderService.GetContactFromSystem(inputContact);
+        if (foundContact is null)
         {
-            _mapper.Map<RequestDto, Contact>(dto, foundContact);
-            _contactRepository.Update(foundContact);
+            var incident = _mapper.Map<RequestDto, Incident>(dto);
+            await _changerService.CreateContactAndIncidentAsync(inputContact, incident, account);
         }
         else
         {
-            var contact = _mapper.Map<RequestDto, Contact>(dto);
-            _contactRepository.Add(contact);
-            var incident = new Incident()
-            {
-                Description = dto.IncidentDescription,
-                IncidentName = await GenerateIncidentName()
-            };
-            incident.Accounts.Add(foundAccount);
-            _incidentRepository.Add(incident);
+            _mapper.Map(dto, foundContact);
+            await _changerService.UpdateContactAsync(foundContact, account);
         }
-
-        await _unitOfWork.CompleteAsync();
 
         return Ok();
     }
-
-    private async Task<string> GenerateIncidentName()
-    {
-        string guid;
-        Incident? foundIncident;
-        do
-        {
-            guid = Guid.NewGuid().ToString();
-            foundIncident = await _incidentRepository.GetByName(guid);
-        } while (foundIncident != null);
-
-        return guid;
-    }
-
 }

@@ -3,6 +3,7 @@ using TestExercise.Abstractions;
 using TestExercise.Data;
 using TestExercise.MappingProfiles;
 using TestExercise.Repositories;
+using TestExercise.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IChangerService, ChangerService>();
+builder.Services.AddScoped<IFinderService, FinderService>();
 
 builder.Services.AddAutoMapper(o => o.AddProfile<MappingProfile>());
 

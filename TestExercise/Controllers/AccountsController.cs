@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TestExercise.Abstractions;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TestExercise.Controllers.DTOs;
+using TestExercise.Services;
 
 namespace TestExercise.Controllers;
 
@@ -7,17 +9,20 @@ namespace TestExercise.Controllers;
 [Route("api/[controller]")]
 public class AccountsController : Controller
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IFinderService _finderService;
+    private readonly IMapper _mapper;
 
-    public AccountsController(IAccountRepository accountRepository)
+    public AccountsController(IFinderService finderService, IMapper mapper)
     {
-        _accountRepository = accountRepository;
+        _finderService = finderService;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAccounts()
     {
-        var accounts = await _accountRepository.GetAll();
-        return Ok(accounts);
+        var accounts = await _finderService.GetAllAccounts();
+        var response = _mapper.Map<List<AccountResponseDto>>(accounts);
+        return Ok(response);
     }
 }
