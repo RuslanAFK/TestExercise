@@ -8,5 +8,5 @@ public interface IIncidentRepository
     Task<Incident?> GetByName(string name);
     void Add(Incident incident);
     void Update(Incident incident);
-    void Remove(Incident incident);
+    void Delete(Incident incident);
 }

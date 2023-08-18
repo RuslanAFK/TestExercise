@@ -9,5 +9,5 @@ public interface IAccountRepository
     Task<Account?> GetByName(string name);
     void Add(Account account);
     void Update(Account account);
-    void Remove(Account account);
+    void Delete(Account account);
 }

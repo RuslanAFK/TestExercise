@@ -5,42 +5,24 @@ using TestExercise.Domain.Models;
 
 namespace TestExercise.Repositories;
 
-public class ContactRepository : IContactRepository
+public class ContactRepository : BaseRepository<Contact>, IContactRepository
 {
-    private readonly AppDbContext _dbContext;
 
-    public ContactRepository(AppDbContext dbContext)
+    public ContactRepository(AppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
-    }
-    private DbSet<Contact> Items
-    {
-        get => _dbContext.Contacts;
     }
 
-    public async Task<List<Contact>> GetAll()
+    public override async Task<List<Contact>> GetAll()
     {
         return await Items.ToListAsync();
     }
 
     public async Task<Contact?> GetById(int id)
     {
-        return await Items.FindAsync(id);
+        return await GetBy(c => c.ContactId == id);
     }
     public async Task<Contact?> GetByEmail(string email)
     {
-        return await Items.SingleOrDefaultAsync(a => a.Email == email);
-    }
-    public void Add(Contact contact)
-    {
-        _dbContext.Contacts.Add(contact);
-    }
-    public void Update(Contact contact)
-    {
-        _dbContext.Contacts.Update(contact);
-    }
-    public void Remove(Contact contact)
-    {
-        _dbContext.Contacts.Remove(contact);
+        return await GetBy(a => a.Email == email);
     }
 }

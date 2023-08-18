@@ -5,43 +5,22 @@ using TestExercise.Domain.Models;
 
 namespace TestExercise.Repositories;
 
-public class AccountRepository : IAccountRepository
+public class AccountRepository : BaseRepository<Account>, IAccountRepository
 {
-    private readonly AppDbContext _dbContext;
-
-    public AccountRepository(AppDbContext dbContext)
+    public AccountRepository(AppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
-
-    private DbSet<Account> Items
-    {
-        get => _dbContext.Set<Account>();
-    }
-
-    public async Task<List<Account>> GetAll()
+    public override async Task<List<Account>> GetAll()
     {
         return await Items.Include(a => a.Contacts).ToListAsync();
     }
 
     public async Task<Account?> GetById(int id)
     {
-        return await Items.FindAsync(id);
+        return await GetBy(a => a.AccountId == id);
     }
     public async Task<Account?> GetByName(string name)
     {
-        return await Items.SingleOrDefaultAsync(a => a.AccountName == name);
-    }
-    public void Add(Account account)
-    {
-        _dbContext.Accounts.Add(account);
-    }
-    public void Update(Account account)
-    {
-        _dbContext.Accounts.Update(account);
-    }
-    public void Remove(Account account)
-    {
-        _dbContext.Accounts.Remove(account);
+        return await GetBy(a => a.AccountName == name);
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestExercise.Abstractions;
 
-public interface IBaseRepository<T>
+public interface IBaseRepository<T> where T : class
 {
-    IQueryable<T> GetAll();
-    Task<T?> GetById(object id);
-    Task<T?> GetBy(Expression<Func<bool>> expression);
+    Task<T?> GetBy(Expression<Func<T, bool>> expression);
     void Add(T item);
     void Update(T item);
     void Delete(T item);

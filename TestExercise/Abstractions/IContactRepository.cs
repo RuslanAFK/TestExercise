@@ -9,5 +9,5 @@ public interface IContactRepository
     Task<Contact?> GetByEmail(string email);
     void Add(Contact contact);
     void Update(Contact contact);
-    void Remove(Contact contact);
+    void Delete(Contact contact);
 }
