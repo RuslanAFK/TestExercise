@@ -1,5 +1,6 @@
-﻿using TestExercise.Abstractions;
-using TestExercise.Domain.Models;
+﻿using Abstractions.Repositories;
+using Abstractions.Services;
+using Domain.Models;
 
 namespace TestExercise.Services;
 

@@ -1,8 +1,9 @@
+using Abstractions.Repositories;
+using Abstractions.Services;
+using Data;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
-using TestExercise.Abstractions;
-using TestExercise.Data;
 using TestExercise.MappingProfiles;
-using TestExercise.Repositories;
 using TestExercise.Services;
 
 var builder = WebApplication.CreateBuilder(args);

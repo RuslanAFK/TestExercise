@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using TestExercise.Controllers.DTOs;
-using TestExercise.Domain.Models;
+using Domain.DTOs;
+using Domain.Models;
 
 namespace TestExercise.MappingProfiles;
 

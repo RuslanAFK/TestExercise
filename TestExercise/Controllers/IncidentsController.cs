@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+﻿using Abstractions.Services;
+using AutoMapper;
+using Domain.DTOs;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using TestExercise.Controllers.DTOs;
-using TestExercise.Domain.Models;
-using TestExercise.Services;
 
 namespace TestExercise.Controllers;
 
