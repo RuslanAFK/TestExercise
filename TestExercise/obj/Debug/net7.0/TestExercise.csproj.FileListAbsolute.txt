@@ -74,3 +74,5 @@ C:\Users\rusla\source\repos\TestExercise\TestExercise\obj\Debug\net7.0\refint\Te
 C:\Users\rusla\source\repos\TestExercise\TestExercise\obj\Debug\net7.0\TestExercise.pdb
 C:\Users\rusla\source\repos\TestExercise\TestExercise\obj\Debug\net7.0\TestExercise.genruntimeconfig.cache
 C:\Users\rusla\source\repos\TestExercise\TestExercise\obj\Debug\net7.0\ref\TestExercise.dll
+C:\Users\rusla\source\repos\TestExercise\TestExercise\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\rusla\source\repos\TestExercise\TestExercise\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -11,8 +11,15 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.HasKey(a => a.AccountId);
         builder.HasIndex(a => a.AccountName)
             .IsUnique();
-        builder.HasOne(a => a.Incident)
+        builder.HasOne<Incident>()
             .WithMany(i => i.Accounts)
             .HasForeignKey(a => a.IncidentName);
+
+        var defaultAccount = new Account()
+        {
+            AccountId = 1,
+            AccountName = "ruslan"
+        };
+        builder.HasData(defaultAccount);
     }
 }

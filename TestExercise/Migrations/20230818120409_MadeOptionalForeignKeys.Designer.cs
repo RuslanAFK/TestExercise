@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestExercise.Data;
 
@@ -11,9 +12,11 @@ using TestExercise.Data;
 namespace TestExercise.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818120409_MadeOptionalForeignKeys")]
+    partial class MadeOptionalForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,14 +47,7 @@ namespace TestExercise.Migrations
 
                     b.HasIndex("IncidentName");
 
-                    b.ToTable("Accounts", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            AccountId = 1,
-                            AccountName = "ruslan"
-                        });
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("TestExercise.Domain.Models.Contact", b =>
@@ -84,7 +80,7 @@ namespace TestExercise.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("TestExercise.Domain.Models.Incident", b =>
@@ -98,7 +94,7 @@ namespace TestExercise.Migrations
 
                     b.HasKey("IncidentName");
 
-                    b.ToTable("Incidents", (string)null);
+                    b.ToTable("Incidents");
                 });
 
             modelBuilder.Entity("TestExercise.Domain.Models.Account", b =>

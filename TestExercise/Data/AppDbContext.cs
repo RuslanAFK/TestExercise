@@ -7,7 +7,7 @@ namespace TestExercise.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<Incident> Incidents { get; set; }
-    public DbSet<Account> Account { get; set; }
+    public DbSet<Account> Accounts { get; set; }
     public DbSet<Contact> Contacts { get; set; }
 
     public AppDbContext(DbContextOptions options) : base(options)
